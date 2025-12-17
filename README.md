@@ -9,6 +9,8 @@ A fun and interactive word-guessing game with support for 4-8 character words. B
 ## ✨ Features
 
 - **Multiple Word Lengths**: Choose from 4, 5, 6, 7, or 8 letter words
+- **Custom Word Challenges**: Create your own word and share a link for others to guess
+- **Shareable Links**: Generate encoded URLs to challenge friends with specific words
 - **Visual Feedback**: Color-coded tiles show correct letters (green), present letters (yellow), and absent letters (gray)
 - **Interactive Keyboard**: Use either the on-screen keyboard or your physical keyboard
 - **6 Attempts**: Try to guess the word in 6 attempts or less
@@ -26,6 +28,32 @@ A fun and interactive word-guessing game with support for 4-8 character words. B
    - 🟨 **Yellow**: Letter is in the word but in the wrong position
    - ⬜ **Gray**: Letter is not in the word
 5. **Win or Try Again**: Guess the word in 6 attempts to win!
+
+## 🎁 Create Custom Word Challenges
+
+Challenge your friends with your own words!
+
+### How to Create a Challenge:
+
+1. **Enter Your Word**: Type any 4-8 letter word in the "Create Challenge" input field
+2. **Generate Link**: Click "Create Link" to generate a shareable URL
+3. **Copy & Share**: Click "Copy Link" to copy the URL to your clipboard
+4. **Challenge Friends**: Share the link with anyone - they'll try to guess YOUR word!
+
+### Example:
+
+If you create a challenge with the word "HELLO", you'll get a shareable link like:
+```
+https://ccabos.github.io/Wordle/?w=SEVMTE8=
+```
+
+The word is encoded (Base64) so it's hidden from plain view in the URL. When someone clicks your link, they'll play a game trying to guess your specific word!
+
+### Notes:
+- Custom words must be 4-8 letters long
+- Only letters (A-Z) are allowed
+- The custom word UI is hidden when someone is playing your challenge
+- Players can still see your word length from the game board
 
 ## 📊 Word Lists
 
