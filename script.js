@@ -413,9 +413,12 @@ function submitGuess() {
         return;
     }
 
-    // Check if word is in word list
+    // Check if word is in word list (or is the custom target word)
     const wordList = WORD_LISTS[gameState.wordLength];
-    if (!wordList.includes(gameState.currentWord)) {
+    const isValidWord = wordList.includes(gameState.currentWord) ||
+                        (gameState.customWord && gameState.currentWord === gameState.targetWord);
+
+    if (!isValidWord) {
         showMessage('Not in word list', 2000);
         shakeTiles();
         return;
