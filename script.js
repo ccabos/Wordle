@@ -430,7 +430,7 @@ const WORD_LISTS = {
 // Game state
 let gameState = {
     wordLength: 5,
-    maxAttempts: 6,
+    maxAttempts: 7,
     currentWord: '',
     currentRow: 0,
     currentTile: 0,
