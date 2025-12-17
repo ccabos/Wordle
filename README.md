@@ -61,12 +61,12 @@ The word is encoded (Base64) so it's hidden from plain view in the URL. When som
 
 The game includes extensive, curated word lists for each length:
 - **4-letter words**: 249 words
-- **5-letter words**: 514 words
+- **5-letter words**: 2,370 words
 - **6-letter words**: 517 words
 - **7-letter words**: 510 words
 - **8-letter words**: 535 words
 
-**Total: 2,325 validated words**
+**Total: 4,181 validated words**
 
 ### How Word Lists Work
 
