@@ -49,26 +49,76 @@ https://ccabos.github.io/Wordle/?w=SEVMTE8=
 
 The word is encoded (Base64) so it's hidden from plain view in the URL. When someone clicks your link, they'll play a game trying to guess your specific word!
 
-### Notes:
+### Important Notes:
+- **Custom words DON'T need to be in the dictionary!** Use any word you want: names, made-up words, acronyms, etc.
 - Custom words must be 4-8 letters long
-- Only letters (A-Z) are allowed
+- Only letters (A-Z) are allowed (no numbers or special characters)
 - The custom word UI is hidden when someone is playing your challenge
 - Players can still see your word length from the game board
+- Players can guess ANY word from the word lists, plus your custom word will always be accepted as a valid guess
 
 ## 📊 Word Lists
 
-The game includes extensive word lists for each length:
+The game includes extensive, curated word lists for each length:
 - **4-letter words**: 249 words
 - **5-letter words**: 514 words
 - **6-letter words**: 517 words
 - **7-letter words**: 510 words
 - **8-letter words**: 535 words
 
+**Total: 2,325 validated words**
+
+### How Word Lists Work
+
+**In Normal Mode:**
+- The game randomly selects a target word from the appropriate word list
+- Players can only submit guesses that exist in the word lists
+- This ensures fair gameplay with real, common English words
+
+**In Custom Challenge Mode:**
+- You can use ANY word (4-8 letters), even if it's not in the dictionary
+- Players can guess words from the lists OR your exact custom word
+- This allows creative challenges with names, made-up words, or uncommon terms
+
+### Word List Validation
+
 All word lists have been validated to ensure:
-- Words match their declared length
-- No duplicate entries
-- Proper capitalization
-- Common English words
+- ✅ Words match their declared length (no 5-letter words in the 4-letter list)
+- ✅ No duplicate entries
+- ✅ Proper capitalization (all uppercase)
+- ✅ Common English words (curated from standard vocabulary)
+
+### Extending the Word Lists
+
+Want to add more words? It's easy!
+
+1. **Open `script.js`**
+2. **Find the `WORD_LISTS` object** (starts at line 1)
+3. **Add words to the appropriate array:**
+   ```javascript
+   5: ['ABOUT', 'ABOVE', ..., 'YOUR_WORD', 'ANOTHER'],
+   ```
+4. **Important rules:**
+   - Words must be in ALL CAPS
+   - Must match the array's letter count
+   - Separate with commas
+   - Use single quotes
+
+5. **Validate your changes:**
+   ```bash
+   node test_validation.js
+   ```
+
+This will catch any errors like wrong lengths, duplicates, or formatting issues.
+
+**Example:**
+```javascript
+const WORD_LISTS = {
+    4: ['ABLE', 'ALSO', 'AREA', 'BACK', 'YOUR', 'WORD'],  // Added 'YOUR' and 'WORD'
+    5: ['ABOUT', 'ABOVE', 'HELLO', 'WORLD'],  // Added 'HELLO' and 'WORLD'
+    // ... rest of the lists
+};
+```
 
 ## 🚀 Local Development
 
@@ -122,10 +172,22 @@ Wordle/
 ## 🎨 Customization
 
 You can easily customize the game by:
-- Modifying word lists in `script.js`
-- Adjusting colors in `style.css`
-- Changing the number of attempts in `script.js` (`maxAttempts`)
-- Adding more word lengths to `WORD_LISTS`
+
+### Visual Customization
+- **Colors**: Edit color values in `style.css`
+  - Tile colors: `.tile.correct`, `.tile.present`, `.tile.absent`
+  - Background: `body { background-color: ... }`
+  - Keyboard: `.key`, `.key:hover`
+
+### Gameplay Customization
+- **Attempts**: Change `maxAttempts: 6` in `script.js` (line 247)
+- **Word Lists**: See "Extending the Word Lists" section above
+- **Word Lengths**: Add new length categories to `WORD_LISTS` object
+  ```javascript
+  9: ['WONDERFUL', 'BEAUTIFUL', 'CHALLENGE'],  // 9-letter words
+  10: ['BASKETBALL', 'JAVASCRIPT', 'TECHNOLOGY']  // 10-letter words
+  ```
+  Then add options to the HTML dropdown in `index.html`
 
 ## 🐛 Known Issues
 
