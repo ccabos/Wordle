@@ -248,17 +248,65 @@ let gameState = {
     currentRow: 0,
     currentTile: 0,
     gameOver: false,
-    letterStatus: {}
+    letterStatus: {},
+    customWord: false
 };
+
+// Encode/Decode functions for URL sharing
+function encodeWord(word) {
+    return btoa(word);
+}
+
+function decodeWord(encoded) {
+    try {
+        return atob(encoded);
+    } catch (e) {
+        return null;
+    }
+}
+
+// Get custom word from URL parameter
+function getCustomWordFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const encodedWord = urlParams.get('w');
+    if (encodedWord) {
+        const word = decodeWord(encodedWord);
+        if (word && /^[A-Z]+$/.test(word) && word.length >= 4 && word.length <= 8) {
+            return word;
+        }
+    }
+    return null;
+}
 
 // Initialize game
 document.addEventListener('DOMContentLoaded', () => {
     initializeGame();
     setupEventListeners();
+    setupCustomWordUI();
 });
 
 function initializeGame() {
-    const wordLength = parseInt(document.getElementById('wordLength').value);
+    const customWord = getCustomWordFromURL();
+    let wordLength, targetWord, isCustom = false;
+
+    if (customWord) {
+        // Use custom word from URL
+        wordLength = customWord.length;
+        targetWord = customWord;
+        isCustom = true;
+        document.getElementById('wordLength').value = wordLength;
+        // Hide custom word UI when playing a challenge
+        document.getElementById('customWordSection').style.display = 'none';
+    } else {
+        // Random word
+        wordLength = parseInt(document.getElementById('wordLength').value);
+        const wordList = WORD_LISTS[wordLength];
+        const randomIndex = Math.floor(Math.random() * wordList.length);
+        targetWord = wordList[randomIndex];
+        // Show custom word UI in normal mode
+        document.getElementById('customWordSection').style.display = 'flex';
+    }
+
     gameState = {
         wordLength: wordLength,
         maxAttempts: 6,
@@ -266,13 +314,10 @@ function initializeGame() {
         currentRow: 0,
         currentTile: 0,
         gameOver: false,
-        letterStatus: {}
+        letterStatus: {},
+        targetWord: targetWord,
+        customWord: isCustom
     };
-
-    // Select random word
-    const wordList = WORD_LISTS[wordLength];
-    const randomIndex = Math.floor(Math.random() * wordList.length);
-    gameState.targetWord = wordList[randomIndex];
 
     console.log('Target word:', gameState.targetWord); // For debugging
 
@@ -478,6 +523,63 @@ function showMessage(text, duration) {
             messageEl.textContent = '';
         }, duration);
     }
+}
+
+// Setup custom word UI
+function setupCustomWordUI() {
+    const createChallengeBtn = document.getElementById('createChallenge');
+    const customWordInput = document.getElementById('customWordInput');
+    const shareLink = document.getElementById('shareLink');
+    const copyLinkBtn = document.getElementById('copyLink');
+
+    createChallengeBtn.addEventListener('click', () => {
+        const word = customWordInput.value.toUpperCase().trim();
+
+        // Validate word
+        if (!word) {
+            showMessage('Please enter a word', 2000);
+            return;
+        }
+
+        if (!/^[A-Z]+$/.test(word)) {
+            showMessage('Only letters allowed', 2000);
+            return;
+        }
+
+        if (word.length < 4 || word.length > 8) {
+            showMessage('Word must be 4-8 letters', 2000);
+            return;
+        }
+
+        // Generate shareable link
+        const encoded = encodeWord(word);
+        const baseUrl = window.location.origin + window.location.pathname;
+        const shareUrl = `${baseUrl}?w=${encoded}`;
+
+        shareLink.value = shareUrl;
+        shareLink.style.display = 'block';
+        copyLinkBtn.style.display = 'inline-block';
+
+        showMessage('Challenge link created!', 2000);
+    });
+
+    copyLinkBtn.addEventListener('click', () => {
+        shareLink.select();
+        shareLink.setSelectionRange(0, 99999); // For mobile devices
+
+        navigator.clipboard.writeText(shareLink.value).then(() => {
+            showMessage('Link copied to clipboard!', 2000);
+        }).catch(() => {
+            showMessage('Failed to copy link', 2000);
+        });
+    });
+
+    // Clear input on Enter
+    customWordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            createChallengeBtn.click();
+        }
+    });
 }
 
 // Add shake animation CSS via JavaScript
